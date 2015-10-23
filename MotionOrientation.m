@@ -108,6 +108,59 @@ NSString* const kMotionOrientationKey = @"kMotionOrientationKey";
     return CGAffineTransformMakeRotation(MO_degreesToRadian(rotationDegree));
 }
 
+- (UIImageOrientation)imageOrientation {
+    
+    UIImageOrientation imageOrientation = UIImageOrientationRight;
+    // Use the MotionOrientation an not self.videoOrientation since MotionOrientation will give us the latest value
+    UIInterfaceOrientation interfaceOrientation = self.interfaceOrientation;
+    switch (interfaceOrientation)
+    {
+        case UIInterfaceOrientationPortrait:
+            imageOrientation = UIImageOrientationRight;
+            break;
+            
+        case UIInterfaceOrientationPortraitUpsideDown:
+            imageOrientation = UIImageOrientationLeft;
+            break;
+            
+        case UIInterfaceOrientationLandscapeRight:
+            imageOrientation = UIImageOrientationUp;
+            break;
+            
+        case UIInterfaceOrientationLandscapeLeft:
+            imageOrientation = UIImageOrientationDown;
+            break;
+        
+        // Fallback to device orientaion if nit ready, although this will give false orientation when Portraint Orientation Lock is enabled
+        case UIInterfaceOrientationUnknown:
+        {
+            switch ([[UIDevice currentDevice] orientation]) {
+                case UIDeviceOrientationPortrait:
+                    imageOrientation = UIImageOrientationRight;
+                    break;
+                case UIDeviceOrientationPortraitUpsideDown:
+                    imageOrientation = UIImageOrientationLeft;
+                    break;
+                case UIDeviceOrientationLandscapeLeft: // UIDeviceOrientationLandscapeLeft means UIInterfaceOrientationLandscapeRight, see docs
+                    imageOrientation = UIImageOrientationUp;
+                    break;
+                case UIDeviceOrientationLandscapeRight: // UIDeviceOrientationLandscapeRight means UIInterfaceOrientationLandscapeLeft, see docs
+                    
+                    imageOrientation = UIImageOrientationLeft;
+                    break;
+                default:
+                    break;
+            }
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
+    return imageOrientation;
+}
+
 - (void)accelerometerUpdateWithData:(CMAccelerometerData *)accelerometerData error:(NSError *)error
 {
     if ( error ) {

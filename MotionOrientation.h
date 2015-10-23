@@ -16,6 +16,7 @@ extern NSString* const kMotionOrientationKey;
 @interface MotionOrientation : NSObject
 
 @property (readonly) UIInterfaceOrientation interfaceOrientation;
+@property (readonly) UIImageOrientation imageOrientation;
 @property (readonly) UIDeviceOrientation deviceOrientation;
 @property (readonly) CGAffineTransform affineTransform;
 
